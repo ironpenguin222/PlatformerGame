@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float acceleration = 5f;
     public float deceleration = 3f;
     public float jumpHeight = 10f;
+    private bool isGrounded = false;
     public enum FacingDirection
     {
         left, right
@@ -35,9 +36,9 @@ public class PlayerController : MonoBehaviour
     {
         if (playerInput.x != 0)
         {
-            rb.AddForce(playerInput * acceleration, ForceMode2D.Force);
+            rb.AddForce(new Vector2(playerInput.x * acceleration, 0), ForceMode2D.Force);
 
-            rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
+            rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed), rb.velocity.y);
         }
         else if (rb.velocity.magnitude > 0.15f)
         {
@@ -50,7 +51,10 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+        if (isGrounded)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+        }
     }
 
     private void UpdateFacingDirection(Vector2 input)
@@ -76,12 +80,39 @@ public class PlayerController : MonoBehaviour
 
     public bool IsWalking()
     {
-        return Mathf.Abs(rb.velocity.x) > 0.1f;
+        if (Mathf.Abs(rb.velocity.x) > 0.1f)
+        {
+            return true;
+        }else { return false; }
 
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
+
     public bool IsGrounded()
     {
-        return false;
+        if (isGrounded)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public FacingDirection GetFacingDirection()

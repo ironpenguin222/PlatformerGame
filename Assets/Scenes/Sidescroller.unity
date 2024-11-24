@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 1054579209}
   m_Layer: 0
   m_Name: GroundTilemap
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1695,10 +1695,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 1433354318}
   animator: {fileID: 1433354313}
-  maxSpeed: 7
-  acceleration: 5
-  deceleration: 4
-  jumpHeight: 5
+  maxSpeed: 8
+  acceleration: 6
+  deceleration: 2
+  jumpHeight: 12
 --- !u!4 &1433354315
 Transform:
   m_ObjectHideFlags: 0
@@ -1827,7 +1827,7 @@ Rigidbody2D:
   m_Mass: 2
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
