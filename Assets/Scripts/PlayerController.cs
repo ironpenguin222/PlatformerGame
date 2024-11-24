@@ -1,5 +1,4 @@
 using UnityEngine;
-using static PlayerController;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 10f;
     public float acceleration = 5f;
     public float deceleration = 3f;
+    public float jumpHeight = 10f;
     public enum FacingDirection
     {
         left, right
@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour
         Vector2 playerInput = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
         MovementUpdate(playerInput);
         UpdateFacingDirection(playerInput);
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
     }
 
     private void MovementUpdate(Vector2 playerInput)
@@ -35,10 +39,18 @@ public class PlayerController : MonoBehaviour
 
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
         }
+        else if (rb.velocity.magnitude > 0.15f)
+        {
+            rb.AddForce(new Vector2(-rb.velocity.x * deceleration, 0), ForceMode2D.Force);
+        }
         else
         {
-                rb.AddForce(-rb.velocity.normalized * deceleration);
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
+    }
+    private void Jump()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
     }
 
     private void UpdateFacingDirection(Vector2 input)
@@ -64,7 +76,8 @@ public class PlayerController : MonoBehaviour
 
     public bool IsWalking()
     {
-            return false;
+        return Mathf.Abs(rb.velocity.x) > 0.1f;
+
     }
     public bool IsGrounded()
     {
