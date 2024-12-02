@@ -7,8 +7,13 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 10f;
     public float acceleration = 5f;
     public float deceleration = 3f;
-    public float jumpHeight = 10f;
+    public float apexHeight = 10f;
+    public float apexTime = 10f;
     private bool isGrounded = false;
+    private bool isJumping = false;
+    private float gravity;
+    private float jumpVelocity;
+    private float upVelocity;
     public enum FacingDirection
     {
         left, right
@@ -17,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        
+        CalcJumping();
     }
 
 
@@ -30,6 +35,16 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
+        if (isJumping) {
+            CurrentJump();
+        }
+    }
+
+    void CalcJumping()
+    {
+        gravity = -2 * apexHeight / (apexTime * apexTime);
+        jumpVelocity = 2 * apexHeight / apexTime;
+
     }
 
     private void MovementUpdate(Vector2 playerInput)
@@ -51,11 +66,23 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        if (isGrounded)
+        if (isGrounded && !isJumping)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            isJumping = true;
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            upVelocity = jumpVelocity;
         }
     }
+
+    private void CurrentJump() {
+        upVelocity += gravity * Time.deltaTime;
+        rb.velocity = new Vector2(rb.velocity.x, upVelocity);
+        if (upVelocity <= 0 && rb.velocity.y <= 0)
+        {
+            isJumping = false;
+        }
+    }
+
 
     private void UpdateFacingDirection(Vector2 input)
     {
