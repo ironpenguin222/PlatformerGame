@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour
         upVelocity += gravity * Time.deltaTime;
         rb.velocity = new Vector2(rb.velocity.x, upVelocity);
 
-        if (upVelocity > -terminalVelocity)
+        if (upVelocity < -terminalVelocity)
         {
             upVelocity = -terminalVelocity;
         }
