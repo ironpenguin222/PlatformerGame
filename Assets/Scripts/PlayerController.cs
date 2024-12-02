@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private float gravity;
     private float jumpVelocity;
     private float upVelocity;
+    public float terminalVelocity = 8;
     public enum FacingDirection
     {
         left, right
@@ -77,6 +78,12 @@ public class PlayerController : MonoBehaviour
     private void CurrentJump() {
         upVelocity += gravity * Time.deltaTime;
         rb.velocity = new Vector2(rb.velocity.x, upVelocity);
+
+        if (upVelocity > terminalVelocity)
+        {
+            upVelocity = terminalVelocity;
+        }
+
         if (upVelocity <= 0 && rb.velocity.y <= 0)
         {
             isJumping = false;

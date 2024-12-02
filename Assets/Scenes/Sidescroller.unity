@@ -1698,7 +1698,9 @@ MonoBehaviour:
   maxSpeed: 6
   acceleration: 5
   deceleration: 1.7
-  jumpHeight: 12
+  apexHeight: 3.7
+  apexTime: 1
+  terminalVelocity: 8
 --- !u!4 &1433354315
 Transform:
   m_ObjectHideFlags: 0
