@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private float jumpVelocity;
     private float upVelocity;
     public float terminalVelocity = 8;
+    public float coyoteTime = 0.3f;
+    private float timeFromGround;
     public enum FacingDirection
     {
         left, right
@@ -67,7 +69,7 @@ public class PlayerController : MonoBehaviour
     }
     private void Jump()
     {
-        if (isGrounded && !isJumping)
+        if (isGrounded || Time.time - timeFromGround <= coyoteTime)
         {
             isJumping = true;
             rb.velocity = new Vector2(rb.velocity.x, 0);
@@ -134,6 +136,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false;
+            timeFromGround = Time.time;
         }
     }
 
